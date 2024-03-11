@@ -1,0 +1,98 @@
+#include <iostream>
+#include <cstring>
+#include <cctype>
+
+char* wstaw(const char* zrodlo, char symbol) {
+    int len = strlen(zrodlo);
+    char* nowaTablica = new char[len + len/2 + 1];
+
+    int j = 0;
+    for (int i = 0; i < len + len/2; ++i) {
+        if (i % 3 == 0 && i != 0) {
+            nowaTablica[j++] = symbol;
+        } else {
+            nowaTablica[j++] = zrodlo[i - i/3];
+        }
+    }
+    nowaTablica[j] = '\0';
+
+    return nowaTablica;
+}
+
+void wstaw(char* cel, const char* zrodlo, char symbol) {
+    int len = strlen(zrodlo);
+    int j = 0;
+    for (int i = 0; i < len + len/2; ++i) {
+        if (i % 3 == 0 && i != 0) {
+            cel[j++] = symbol;
+        } else {
+            cel[j++] = zrodlo[i - i/3];
+        }
+    }
+    cel[j] = '\0';
+}
+
+void wstaw1(char*& cel, const char* zrodlo, char symbol) {
+    int len = strlen(zrodlo);
+    int newSize = len + len/2 + 1;
+    char* nowaTablica = new char[newSize];
+
+    int j = 0;
+    for (int i = 0; i < newSize; ++i) {
+        if (i % 3 == 0 && i != 0) {
+            nowaTablica[j++] = symbol;
+        } else {
+            nowaTablica[j++] = zrodlo[i - i/3];
+        }
+    }
+    nowaTablica[j] = '\0';
+    cel = nowaTablica;
+}
+
+int szukaj(const char* zrodlo, char symbol) {
+    int len = strlen(zrodlo);
+    int count = 0;
+    for (int i = 0; i < len; ++i) {
+        if (zrodlo[i] == symbol) {
+            count++;
+        }
+    }
+    return count;
+}
+
+char* kopiuj(const char* zrodlo) {
+    int len = strlen(zrodlo);
+    char* nowaTablica = new char[len + 1];
+    
+    for (int i = 0; i < len; ++i) {
+        nowaTablica[i] = toupper(zrodlo[i]); 
+    }
+    nowaTablica[len] = '\0';
+
+    return nowaTablica;
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        std::cerr << "Podaj dwa argumenty: ciag znakow oraz symbol." << std::endl;
+        return 1;
+    }
+
+    char* a = wstaw(argv[1], argv[2][0]);
+    char* b, *c;
+    b = new char[strlen(argv[1]) + strlen(argv[1])/2 + 1];
+    wstaw(b, argv[1], argv[2][0]);
+    wstaw1(c, argv[1], argv[2][0]);
+
+    std::cout << a << std::endl;
+    std::cout << "Liczba wystapien litery 's': " << szukaj(a, 's') << std::endl;
+
+    a = kopiuj(argv[1]);
+    std::cout << a << std::endl;
+
+    delete[] a;
+    delete[] b;
+    delete[] c;
+
+    return 0;
+}
